@@ -5,7 +5,7 @@ import torch
 import secrets
 import os
 from model import Brain, DQN
-from engine import MortalEngine
+from engine import WalkingEngine
 from libriichi.arena import OneVsThree
 from config import config
 
@@ -29,15 +29,15 @@ def main():
         version = cham_cfg['control'].get('version', 1)
         conv_channels = cham_cfg['resnet']['conv_channels']
         num_blocks = cham_cfg['resnet']['num_blocks']
-        mortal = Brain(version=version, conv_channels=conv_channels, num_blocks=num_blocks).eval()
+        walking = Brain(version=version, conv_channels=conv_channels, num_blocks=num_blocks).eval()
         dqn = DQN(version=version).eval()
-        mortal.load_state_dict(state['mortal'])
+        walking.load_state_dict(state['walking'])
         dqn.load_state_dict(state['current_dqn'])
         if cfg['champion']['enable_compile']:
-            mortal.compile()
+            walking.compile()
             dqn.compile()
-        engine_cham = MortalEngine(
-            mortal,
+        engine_cham = WalkingEngine(
+            walking,
             dqn,
             is_oracle = False,
             version = version,
@@ -52,15 +52,15 @@ def main():
     version = chal_cfg['control'].get('version', 1)
     conv_channels = chal_cfg['resnet']['conv_channels']
     num_blocks = chal_cfg['resnet']['num_blocks']
-    mortal = Brain(version=version, conv_channels=conv_channels, num_blocks=num_blocks).eval()
+    walking = Brain(version=version, conv_channels=conv_channels, num_blocks=num_blocks).eval()
     dqn = DQN(version=version).eval()
-    mortal.load_state_dict(state['mortal'])
+    walking.load_state_dict(state['walking'])
     dqn.load_state_dict(state['current_dqn'])
     if cfg['challenger']['enable_compile']:
-        mortal.compile()
+        walking.compile()
         dqn.compile()
-    engine_chal = MortalEngine(
-        mortal,
+    engine_chal = WalkingEngine(
+        walking,
         dqn,
         is_oracle = False,
         version = version,

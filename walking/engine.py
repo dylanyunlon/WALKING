@@ -5,7 +5,7 @@ import numpy as np
 from torch.distributions import Normal, Categorical
 from typing import *
 
-class MortalEngine:
+class WalkingEngine:
     def __init__(
         self,
         brain,
@@ -22,7 +22,7 @@ class MortalEngine:
         boltzmann_temp = 1,
         top_p = 1,
     ):
-        self.engine_type = 'mortal'
+        self.engine_type = 'walking'
         self.device = device or torch.device('cpu')
         assert isinstance(self.device, torch.device)
         self.brain = brain.to(self.device).eval()

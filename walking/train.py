@@ -59,21 +59,21 @@ def train():
     weight_decay = config['optim']['weight_decay']
     max_grad_norm = config['optim']['max_grad_norm']
 
-    mortal = Brain(version=version, **config['resnet']).to(device)
+    walking = Brain(version=version, **config['resnet']).to(device)
     dqn = DQN(version=version).to(device)
     aux_net = AuxNet((4,)).to(device)
-    all_models = (mortal, dqn, aux_net)
+    all_models = (walking, dqn, aux_net)
     if enable_compile:
         for m in all_models:
             m.compile()
 
     logging.info(f'version: {version}')
     logging.info(f'obs shape: {obs_shape(version)}')
-    logging.info(f'mortal params: {parameter_count(mortal):,}')
+    logging.info(f'walking params: {parameter_count(walking):,}')
     logging.info(f'dqn params: {parameter_count(dqn):,}')
     logging.info(f'aux params: {parameter_count(aux_net):,}')
 
-    mortal.freeze_bn(config['freeze_bn']['mortal'])
+    walking.freeze_bn(config['freeze_bn']['walking'])
 
     decay_params = []
     no_decay_params = []
@@ -107,7 +107,7 @@ def train():
         state = torch.load(state_file, weights_only=True, map_location=device)
         timestamp = datetime.fromtimestamp(state['timestamp']).strftime('%Y-%m-%d %H:%M:%S')
         logging.info(f'loaded: {timestamp}')
-        mortal.load_state_dict(state['mortal'])
+        walking.load_state_dict(state['walking'])
         dqn.load_state_dict(state['current_dqn'])
         aux_net.load_state_dict(state['aux_net'])
         if not online or state['config']['control']['online']:
@@ -127,7 +127,7 @@ def train():
         logging.info(f'device: {device}')
 
     if online:
-        submit_param(mortal, dqn, is_idle=True)
+        submit_param(walking, dqn, is_idle=True)
         logging.info('param has been submitted')
 
     writer = SummaryWriter(config['control']['tensorboard_dir'])
@@ -229,7 +229,7 @@ def train():
             q_target_mc = q_target_mc.to(torch.float32)
 
             with torch.autocast(device.type, enabled=enable_amp):
-                phi = mortal(obs)
+                phi = walking(obs)
                 q_out = dqn(phi, masks)
                 q = q_out[range(batch_size), actions]
                 dqn_loss = 0.5 * mse(q, q_target_mc)
@@ -269,7 +269,7 @@ def train():
             pb.update(1)
 
             if online and steps % submit_every == 0:
-                submit_param(mortal, dqn, is_idle=False)
+                submit_param(walking, dqn, is_idle=False)
                 logging.info('param has been submitted')
 
             if steps % save_every == 0:
@@ -296,7 +296,7 @@ def train():
                 logging.info(f'total steps: {steps:,} (~{before_next_test_play:,})')
 
                 state = {
-                    'mortal': mortal.state_dict(),
+                    'walking': walking.state_dict(),
                     'current_dqn': dqn.state_dict(),
                     'aux_net': aux_net.state_dict(),
                     'optimizer': optimizer.state_dict(),
@@ -310,12 +310,12 @@ def train():
                 torch.save(state, state_file)
 
                 if online and steps % submit_every != 0:
-                    submit_param(mortal, dqn, is_idle=False)
+                    submit_param(walking, dqn, is_idle=False)
                     logging.info('param has been submitted')
 
                 if steps % test_every == 0:
-                    stat = test_player.test_play(test_games // 4, mortal, dqn, device)
-                    mortal.train()
+                    stat = test_player.test_play(test_games // 4, walking, dqn, device)
+                    walking.train()
                     dqn.train()
 
                     avg_pt = stat.avg_pt([90, 45, 0, -135]) # for display only, never used in training
@@ -423,7 +423,7 @@ def train():
         pb.close()
 
         if online:
-            submit_param(mortal, dqn, is_idle=True)
+            submit_param(walking, dqn, is_idle=True)
             logging.info('param has been submitted')
 
     while True:
@@ -443,7 +443,7 @@ def main():
     from config import config
 
     # do not set this env manually
-    is_sub_proc_key = 'MORTAL_IS_SUB_PROC'
+    is_sub_proc_key = 'WALKING_IS_SUB_PROC'
     online = config['control']['online']
     if not online or os.environ.get(is_sub_proc_key, '0') == '1':
         train()

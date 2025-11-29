@@ -15,7 +15,7 @@ use parking_lot::Mutex;
 use pyo3::intern;
 use pyo3::prelude::*;
 
-pub struct MortalBatchAgent {
+pub struct WalkingBatchAgent {
     engine: PyObject,
     is_oracle: bool,
     version: u32,
@@ -46,7 +46,7 @@ struct SyncFields {
     kan_action_idxs: Vec<Option<usize>>,
 }
 
-impl MortalBatchAgent {
+impl WalkingBatchAgent {
     pub fn new(engine: PyObject, player_ids: &[u8]) -> Result<Self> {
         ensure!(player_ids.iter().all(|&id| matches!(id, 0..=3)));
 
@@ -186,7 +186,7 @@ impl MortalBatchAgent {
     }
 }
 
-impl BatchAgent for MortalBatchAgent {
+impl BatchAgent for WalkingBatchAgent {
     #[inline]
     fn name(&self) -> String {
         self.name.clone()

@@ -19,10 +19,10 @@ def main():
     num_blocks = config['resnet']['num_blocks']
     conv_channels = config['resnet']['conv_channels']
 
-    mortal = Brain(version=version, num_blocks=num_blocks, conv_channels=conv_channels).to(device).eval()
+    walking = Brain(version=version, num_blocks=num_blocks, conv_channels=conv_channels).to(device).eval()
     dqn = DQN(version=version).to(device)
     if config['online']['enable_compile']:
-        mortal.compile()
+        walking.compile()
         dqn.compile()
 
     train_player = TrainPlayer()
@@ -46,11 +46,11 @@ def main():
                     param_version = rsp['param_version']
                     break
                 time.sleep(3)
-        mortal.load_state_dict(rsp['mortal'])
+        walking.load_state_dict(rsp['walking'])
         dqn.load_state_dict(rsp['dqn'])
         logging.info('param has been updated')
 
-        rankings, file_list = train_player.train_play(mortal, dqn, device)
+        rankings, file_list = train_player.train_play(walking, dqn, device)
         avg_rank = rankings @ np.arange(1, 5) / rankings.sum()
         avg_pt = rankings @ pts / rankings.sum()
 

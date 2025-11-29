@@ -6,13 +6,13 @@ import json
 import torch
 from datetime import datetime, timezone
 from model import Brain, DQN, GRP
-from engine import MortalEngine
+from engine import WalkingEngine
 from common import filtered_trimmed_lines
 from libriichi.mjai import Bot
 from libriichi.dataset import Grp
 from config import config
 
-USAGE = '''Usage: python mortal.py <ID>
+USAGE = '''Usage: python walking.py <ID>
 
 ARGS:
     <ID>    The player ID, an integer within [0, 3].'''
@@ -24,7 +24,7 @@ def main():
     except:
         print(USAGE, file=sys.stderr)
         sys.exit(1)
-    review_mode = os.environ.get('MORTAL_REVIEW_MODE', '0') == '1'
+    review_mode = os.environ.get('WALKING_REVIEW_MODE', '0') == '1'
 
     device = torch.device('cpu')
     state = torch.load(config['control']['state_file'], weights_only=True, map_location=torch.device('cpu'))
@@ -36,15 +36,15 @@ def main():
         tag = state['tag']
     else:
         time = datetime.fromtimestamp(state['timestamp'], tz=timezone.utc).strftime('%y%m%d%H')
-        tag = f'mortal{version}-b{num_blocks}c{conv_channels}-t{time}'
+        tag = f'walking{version}-b{num_blocks}c{conv_channels}-t{time}'
 
-    mortal = Brain(version=version, num_blocks=num_blocks, conv_channels=conv_channels).eval()
+    walking = Brain(version=version, num_blocks=num_blocks, conv_channels=conv_channels).eval()
     dqn = DQN(version=version).eval()
-    mortal.load_state_dict(state['mortal'])
+    walking.load_state_dict(state['walking'])
     dqn.load_state_dict(state['current_dqn'])
 
-    engine = MortalEngine(
-        mortal,
+    engine = WalkingEngine(
+        walking,
         dqn,
         version = version,
         is_oracle = False,
@@ -52,7 +52,7 @@ def main():
         enable_amp = False,
         enable_quick_eval = not review_mode,
         enable_rule_based_agari_guard = True,
-        name = 'mortal',
+        name = 'walking',
     )
     bot = Bot(engine, player_id)
 

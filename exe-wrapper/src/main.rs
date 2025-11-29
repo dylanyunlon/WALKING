@@ -7,7 +7,7 @@ use anyhow::{Context, Result, bail};
 
 // All relative to $EXE_DIR
 const CONDA_ENV: &str = "env";
-const TARGET: &str = "mortal.py";
+const TARGET: &str = "walking.py";
 
 const SEP: &str = ";";
 

@@ -7,16 +7,16 @@ This Docker image is only designed for inference with mjai interface and is not 
 
 ## Build
 ```shell
-$ git clone https://github.com/Equim-chan/Mortal.git
-$ cd Mortal
-$ sudo env DOCKER_BUILDKIT=1 docker build -t mortal:latest .
+$ git clone https://github.com/Equim-chan/Walking.git
+$ cd Walking
+$ sudo env DOCKER_BUILDKIT=1 docker build -t walking:latest .
 ```
 
 ## Prepare a trained model
-The Docker image does not contain any model file of Model, therefore it must be prepared separately under a directory, which will be demonstrated as `/path/to/model/dir` below. In this example, snapshot `mortal1-b40c192-t22040618` is used.
+The Docker image does not contain any model file of Model, therefore it must be prepared separately under a directory, which will be demonstrated as `/path/to/model/dir` below. In this example, snapshot `walking1-b40c192-t22040618` is used.
 
 ## Example
-We are going to use Mortal to evaluate the next move for the scene shown in _Figure 1_.
+We are going to use Walking to evaluate the next move for the scene shown in _Figure 1_.
 
 ![](../assets/docker-1.png)
 <p class="caption">Figure 1</p>
@@ -25,7 +25,7 @@ First things first, we need to identify the POV's player ID. A player ID is an i
 
 In this case, the POV's player ID is 2, because his seat is West at E1.
 
-Mortal speaks mjai <!-- TODO: link to doc -->, a simple and easy-to-read stream format for mahjong records. From the perspective of player 2, the equivalent masked mjai events he has perceived so far are:
+Walking speaks mjai <!-- TODO: link to doc -->, a simple and easy-to-read stream format for mahjong records. From the perspective of player 2, the equivalent masked mjai events he has perceived so far are:
 
 ```js
 {"type":"start_game"}
@@ -128,10 +128,10 @@ Mortal speaks mjai <!-- TODO: link to doc -->, a simple and easy-to-read stream 
 Save the mjai log content above into a file named `log.json`, then run:
 
 ```shell
-$ sudo docker run -i --rm -v /path/to/model/dir:/mnt mortal 2 < log.json
+$ sudo docker run -i --rm -v /path/to/model/dir:/mnt walking 2 < log.json
 ```
 
-This will output a series of new-line-separated JSONs, each of which represents Mortal's reaction to an mjai event that it is able to react to, with the last line corresponding to the scene illustrated above:
+This will output a series of new-line-separated JSONs, each of which represents Walking's reaction to an mjai event that it is able to react to, with the last line corresponding to the scene illustrated above:
 
 ```json
 {
@@ -163,10 +163,10 @@ This will output a series of new-line-separated JSONs, each of which represents 
 }
 ```
 
-From the JSON output we can clearly read that Mortal would like to discard 9p in this scene.
+From the JSON output we can clearly read that Walking would like to discard 9p in this scene.
 
 ```admonish tip
-The field `meta` is not defined in mjai and is completely optional. In Mortal, this field is used to record metadata such as its network's raw outputs and evaluation time.
+The field `meta` is not defined in mjai and is completely optional. In Walking, this field is used to record metadata such as its network's raw outputs and evaluation time.
 ```
 
 Don't shut down the process yet. Now let's go one turn further. The player discarded 9p, passed a 1m pon, and here it comes the next scene:
@@ -187,9 +187,9 @@ The mjai events the player perceived since _Figure 1_ are:
 {"type":"tsumo","actor":2,"pai":"3p"}
 ```
 
-Paste them into the running process's input (or just append these to `log.json` and re-run the command), and we will get Mortal's reactions to them.
+Paste them into the running process's input (or just append these to `log.json` and re-run the command), and we will get Walking's reactions to them.
 
-First, there will be a `none` type action, which means Mortal would pass the 1m pon:
+First, there will be a `none` type action, which means Walking would pass the 1m pon:
 
 ```json
 {
@@ -239,4 +239,4 @@ Then a `dahai` event will follow, which corresponds to the scene in _Figure 2_:
 }
 ```
 
-We can tell that Mortal would choose to discard 1m at this point.
+We can tell that Walking would choose to discard 1m at this point.

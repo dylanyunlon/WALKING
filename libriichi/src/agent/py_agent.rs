@@ -1,11 +1,11 @@
-use super::{BatchAgent, MjaiLogBatchAgent, MortalBatchAgent};
+use super::{BatchAgent, MjaiLogBatchAgent, WalkingBatchAgent};
 use std::str::FromStr;
 
 use anyhow::{Error, Result, bail};
 use pyo3::prelude::*;
 
 enum EngineType {
-    Mortal,
+    Walking,
     MjaiLog,
 }
 
@@ -14,7 +14,7 @@ impl FromStr for EngineType {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
-            "mortal" => Ok(Self::Mortal),
+            "walking" => Ok(Self::Walking),
             "mjai-log" => Ok(Self::MjaiLog),
             v => bail!("unknown engine type {v}"),
         }
@@ -30,7 +30,7 @@ pub fn new_py_agent(engine: PyObject, player_ids: &[u8]) -> Result<Box<dyn Batch
             .parse()
     })?;
     let agent = match engine_type {
-        EngineType::Mortal => Box::new(MortalBatchAgent::new(engine, player_ids)?) as _,
+        EngineType::Walking => Box::new(WalkingBatchAgent::new(engine, player_ids)?) as _,
         EngineType::MjaiLog => Box::new(MjaiLogBatchAgent::new(engine, player_ids)?) as _,
     };
     Ok(agent)

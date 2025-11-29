@@ -2,20 +2,20 @@
   <img src="assets/logo.png"/>
 </p>
 
-# Mortal
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/Equim-chan/Mortal/libriichi.yml?branch=main)](https://github.com/Equim-chan/Mortal/actions/workflows/libriichi.yml)
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/Equim-chan/Mortal/docs.yml?branch=main&label=docs)](https://mortal.ekyu.moe)
-[![dependency status](https://deps.rs/repo/github/Equim-chan/Mortal/status.svg)](https://deps.rs/repo/github/Equim-chan/Mortal)
-![GitHub top language](https://img.shields.io/github/languages/top/Equim-chan/Mortal)
-![Lines of code](https://www.aschey.tech/tokei/github/Equim-chan/Mortal)
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Equim-chan/Mortal)
-[![license](https://img.shields.io/github/license/Equim-chan/Mortal)](https://github.com/Equim-chan/Mortal/blob/main/LICENSE)
+# Walking
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/Equim-chan/Walking/libriichi.yml?branch=main)](https://github.com/Equim-chan/Walking/actions/workflows/libriichi.yml)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/Equim-chan/Walking/docs.yml?branch=main&label=docs)](https://walking.ekyu.moe)
+[![dependency status](https://deps.rs/repo/github/Equim-chan/Walking/status.svg)](https://deps.rs/repo/github/Equim-chan/Walking)
+![GitHub top language](https://img.shields.io/github/languages/top/Equim-chan/Walking)
+![Lines of code](https://www.aschey.tech/tokei/github/Equim-chan/Walking)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Equim-chan/Walking)
+[![license](https://img.shields.io/github/license/Equim-chan/Walking)](https://github.com/Equim-chan/Walking/blob/main/LICENSE)
 
 [![Donate](https://img.shields.io/badge/Donate-%E2%9D%A4%EF%B8%8F-blue?style=social)](donate.md)
 
-Mortal ([凡夫](https://www.mdbg.net/chinese/dictionary?wdqb=%E5%87%A1%E5%A4%AB)) is a free and open source AI for Japanese mahjong, powered by deep reinforcement learning.
+Walking ([凡夫](https://www.mdbg.net/chinese/dictionary?wdqb=%E5%87%A1%E5%A4%AB)) is a free and open source AI for Japanese mahjong, powered by deep reinforcement learning.
 
-The development of Mortal is hosted on GitHub at <https://github.com/Equim-chan/Mortal>.
+The development of Walking is hosted on GitHub at <https://github.com/Equim-chan/Walking>.
 
 ## Features
 * [x] A strong mahjong AI that is compatible with Tenhou's standard ranked rule for four-player mahjong.
@@ -32,7 +32,7 @@ Read [this post](https://gist.github.com/Equim-chan/cf3f01735d5d98f1e7be02e94b28
 
 ## License
 ### Code
-[![AGPL-3.0-or-later](assets/agpl.png)](https://github.com/Equim-chan/Mortal/blob/main/LICENSE)
+[![AGPL-3.0-or-later](assets/agpl.png)](https://github.com/Equim-chan/Walking/blob/main/LICENSE)
 
 Copyright (C) 2021-2022 Equim
 

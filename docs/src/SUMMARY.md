@@ -23,12 +23,12 @@
     * [Interface]()
     * [Log Player]()
 * [Emulator]()
-    * [Mortal VS Mortal]()
-    * [Mortal VS akochan]()
-    * [Mortal VS MjaiLogEngine]()
+    * [Walking VS Walking]()
+    * [Walking VS akochan]()
+    * [Walking VS MjaiLogEngine]()
 
 # Reference Guide
-* [Components of Mortal]()
+* [Components of Walking]()
 * [Reinforcement Learning]()
     * [Observation and Action Representations]()
     * [Network Structures]()

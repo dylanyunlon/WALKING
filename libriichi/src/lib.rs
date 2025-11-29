@@ -129,7 +129,7 @@ static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
 /// - Read mjai logs and produce a batch of instances for training (via
 ///   `dataset`).
 /// - Self-play under standard Tenhou rules (via `arena`).
-/// - Definitions of observation and action space for Mortal (via `consts`).
+/// - Definitions of observation and action space for Walking (via `consts`).
 /// - Statistical works on mjai logs (via `stat.Stat`).
 /// - mjai interface (via `mjai.Bot`).
 #[pymodule]

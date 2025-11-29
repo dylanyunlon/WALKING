@@ -27,7 +27,7 @@ class State:
     buffer_size: int
     submission_id: int
     # fields below are protected by param_lock
-    mortal_param: Optional[OrderedDict]
+    walking_param: Optional[OrderedDict]
     dqn_param: Optional[OrderedDict]
     param_version: int
     idle_param_version: int
@@ -52,7 +52,7 @@ class Handler(BaseRequestHandler):
         with S.dir_lock:
             overflow = S.buffer_size >= S.capacity
             with S.param_lock:
-                has_param = S.mortal_param is not None and S.dqn_param is not None
+                has_param = S.walking_param is not None and S.dqn_param is not None
         if overflow:
             self.send_msg({'status': 'samples overflow'})
             return
@@ -68,7 +68,7 @@ class Handler(BaseRequestHandler):
             else:
                 res = {
                     'status': 'ok',
-                    'mortal': S.mortal_param,
+                    'walking': S.walking_param,
                     'dqn': S.dqn_param,
                     'param_version': S.param_version,
                 }
@@ -87,7 +87,7 @@ class Handler(BaseRequestHandler):
 
     def handle_submit_param(self, msg):
         with S.param_lock:
-            S.mortal_param = msg['mortal']
+            S.walking_param = msg['walking']
             S.dqn_param = msg['dqn']
             S.param_version += 1
             if msg['is_idle']:
@@ -142,7 +142,7 @@ def main():
         param_lock = Lock(),
         buffer_size = 0,
         submission_id = 0,
-        mortal_param = None,
+        walking_param = None,
         dqn_param = None,
         param_version = 0,
         idle_param_version = 0,

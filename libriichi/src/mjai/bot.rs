@@ -1,6 +1,6 @@
 use super::EventWithCanAct;
 use super::{Event, EventExt};
-use crate::agent::{BatchAgent, MortalBatchAgent};
+use crate::agent::{BatchAgent, WalkingBatchAgent};
 use crate::state::PlayerState;
 
 use anyhow::{Context, Result};
@@ -9,7 +9,7 @@ use serde_json as json;
 
 #[pyclass]
 pub struct Bot {
-    agent: MortalBatchAgent,
+    agent: WalkingBatchAgent,
     state: PlayerState,
     log: Vec<EventExt>,
 }
@@ -18,7 +18,7 @@ pub struct Bot {
 impl Bot {
     #[new]
     fn new(engine: PyObject, player_id: u8) -> Result<Self> {
-        let agent = MortalBatchAgent::new(engine, &[player_id])?;
+        let agent = WalkingBatchAgent::new(engine, &[player_id])?;
         let state = PlayerState::new(player_id);
         Ok(Self {
             agent,

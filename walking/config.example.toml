@@ -5,7 +5,7 @@
 version = 4
 online = false
 
-state_file = '/path/to/mortal.pth'
+state_file = '/path/to/walking.pth'
 best_state_file = '/path/to/best.pth'
 tensorboard_dir = '/path/to/dir'
 
@@ -61,7 +61,7 @@ next_rank_weight = 0.2
 
 [freeze_bn]
 # `true` in online training
-mortal = false
+walking = false
 
 [optim]
 eps = 1e-8
@@ -109,7 +109,7 @@ log_dir = '/path/to/1v3'
 
 [1v3.challenger]
 device = 'cuda:0'
-name = 'mortal'
+name = 'walking'
 state_file = '/path/to/challenger.pth'
 stochastic_latent = false
 enable_compile = false

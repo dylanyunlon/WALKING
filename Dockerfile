@@ -21,14 +21,14 @@ pacman -Syu --noconfirm --needed python python-pytorch python-toml python-tqdm t
 pacman -Scc
 EOF
 
-WORKDIR /mortal
-COPY mortal .
+WORKDIR /walking
+COPY walking .
 COPY --from=libriichi_build /target/release/libriichi.so .
 
-ENV MORTAL_CFG config.toml
+ENV WALKING_CFG config.toml
 COPY <<'EOF' config.toml
 [control]
-state_file = '/mnt/mortal.pth'
+state_file = '/mnt/walking.pth'
 
 [resnet]
 conv_channels = 192
@@ -39,4 +39,4 @@ EOF
 
 VOLUME /mnt
 
-ENTRYPOINT ["python", "mortal.py"]
+ENTRYPOINT ["python", "walking.py"]

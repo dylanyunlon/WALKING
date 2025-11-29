@@ -39,13 +39,13 @@ def drain():
             continue
         return msg['drain_dir']
 
-def submit_param(mortal, dqn, is_idle=False):
+def submit_param(walking, dqn, is_idle=False):
     remote = (config['online']['remote']['host'], config['online']['remote']['port'])
     with socket.socket() as conn:
         conn.connect(remote)
         send_msg(conn, {
             'type': 'submit_param',
-            'mortal': mortal.state_dict(),
+            'walking': walking.state_dict(),
             'dqn': dqn.state_dict(),
             'is_idle': is_idle,
         })

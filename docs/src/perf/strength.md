@@ -11,15 +11,15 @@ The simulation employs a 1v3 duplicate mahjong setup, which is organized as foll
 
 In this configuration, each set of 4 games initialize with the same random seed. The emulator ensures that given the same `(seed, kyoku, honba)` combination, the walls, initial hands, dora/ura indicators, and rinshan tiles are deterministic and reproducible.
 
-The emulator is implemented in [`libriichi::arena`](https://github.com/Equim-chan/Mortal/tree/main/libriichi/src/arena).
+The emulator is implemented in [`libriichi::arena`](https://github.com/Equim-chan/Walking/tree/main/libriichi/src/arena).
 
 The "rank pt" in all the tables are calculated using the distribution [90, 45, 0, -135].
 
 ### Random seed
-The random seed often used in the following experiments, 0xd5dfaa4cef265cd7, is derived from the first 8 bytes of the SHA-256 hash of the string `Mortal the mahjong AI`.
+The random seed often used in the following experiments, 0xd5dfaa4cef265cd7, is derived from the first 8 bytes of the SHA-256 hash of the string `Walking the mahjong AI`.
 
-## Mortal vs akochan (jun_pt = [90, 45, 0, -135])
-Challenger is akochan and Champion is Mortal.
+## Walking vs akochan (jun_pt = [90, 45, 0, -135])
+Challenger is akochan and Champion is Walking.
 
 ### "3.1"
 <details>
@@ -153,7 +153,7 @@ Challenger is akochan and Champion is Mortal.
 
 </details>
 
-## Mortal vs akochan (jun_pt = [90, 30, -30, -90])
+## Walking vs akochan (jun_pt = [90, 30, -30, -90])
 ### "1.0"
 <details>
 
@@ -220,7 +220,7 @@ Challenger is akochan and Champion is Mortal.
 
 </details>
 
-## Mortal vs Mortal
+## Walking vs Walking
 ### "4.1c" and "4.0"
 <details>
 

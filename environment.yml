@@ -1,4 +1,4 @@
-name: mortal
+name: walking
 channels:
   - conda-forge
 dependencies:

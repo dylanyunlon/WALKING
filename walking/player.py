@@ -6,7 +6,7 @@ import secrets
 import logging
 from os import path
 from model import Brain, DQN
-from engine import MortalEngine
+from engine import WalkingEngine
 from libriichi.stat import Stat
 from libriichi.arena import OneVsThree
 from config import config
@@ -21,16 +21,16 @@ class TestPlayer:
         version = cfg['control'].get('version', 1)
         conv_channels = cfg['resnet']['conv_channels']
         num_blocks = cfg['resnet']['num_blocks']
-        stable_mortal = Brain(version=version, conv_channels=conv_channels, num_blocks=num_blocks).eval()
+        stable_walking = Brain(version=version, conv_channels=conv_channels, num_blocks=num_blocks).eval()
         stable_dqn = DQN(version=version).eval()
-        stable_mortal.load_state_dict(state['mortal'])
+        stable_walking.load_state_dict(state['walking'])
         stable_dqn.load_state_dict(state['current_dqn'])
         if baseline_cfg['enable_compile']:
-            stable_mortal.compile()
+            stable_walking.compile()
             stable_dqn.compile()
 
-        self.baseline_engine = MortalEngine(
-            stable_mortal,
+        self.baseline_engine = WalkingEngine(
+            stable_walking,
             stable_dqn,
             is_oracle = False,
             version = version,
@@ -42,16 +42,16 @@ class TestPlayer:
         self.chal_version = config['control']['version']
         self.log_dir = path.abspath(config['test_play']['log_dir'])
 
-    def test_play(self, seed_count, mortal, dqn, device):
+    def test_play(self, seed_count, walking, dqn, device):
         torch.backends.cudnn.benchmark = False
-        engine_chal = MortalEngine(
-            mortal,
+        engine_chal = WalkingEngine(
+            walking,
             dqn,
             is_oracle = False,
             version = self.chal_version,
             device = device,
             enable_amp = True,
-            name = 'mortal',
+            name = 'walking',
         )
 
         if path.isdir(self.log_dir):
@@ -68,7 +68,7 @@ class TestPlayer:
             seed_count = seed_count,
         )
 
-        stat = Stat.from_dir(self.log_dir, 'mortal')
+        stat = Stat.from_dir(self.log_dir, 'walking')
         torch.backends.cudnn.benchmark = config['control']['enable_cudnn_benchmark']
         return stat
 
@@ -82,16 +82,16 @@ class TrainPlayer:
         version = cfg['control'].get('version', 1)
         conv_channels = cfg['resnet']['conv_channels']
         num_blocks = cfg['resnet']['num_blocks']
-        stable_mortal = Brain(version=version, conv_channels=conv_channels, num_blocks=num_blocks).eval()
+        stable_walking = Brain(version=version, conv_channels=conv_channels, num_blocks=num_blocks).eval()
         stable_dqn = DQN(version=version).eval()
-        stable_mortal.load_state_dict(state['mortal'])
+        stable_walking.load_state_dict(state['walking'])
         stable_dqn.load_state_dict(state['current_dqn'])
         if baseline_cfg['enable_compile']:
-            stable_mortal.compile()
+            stable_walking.compile()
             stable_dqn.compile()
 
-        self.baseline_engine = MortalEngine(
-            stable_mortal,
+        self.baseline_engine = WalkingEngine(
+            stable_walking,
             stable_dqn,
             is_oracle = False,
             version = version,
@@ -117,10 +117,10 @@ class TrainPlayer:
         self.repeats = cfg['repeats']
         self.repeat_counter = 0
 
-    def train_play(self, mortal, dqn, device):
+    def train_play(self, walking, dqn, device):
         torch.backends.cudnn.benchmark = False
-        engine_chal = MortalEngine(
-            mortal,
+        engine_chal = WalkingEngine(
+            walking,
             dqn,
             is_oracle = False,
             version = self.chal_version,
