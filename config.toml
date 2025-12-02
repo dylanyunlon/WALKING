@@ -1,0 +1,161 @@
+# WALKING Project Configuration
+# Adapted for server environment at /data/jiacheng/system/cache/temp/icml2026/WALKING
+
+[control]
+version = 4
+online = false
+
+state_file = 'workdir/checkpoints/walking.pth'
+best_state_file = 'workdir/checkpoints/best.pth'
+tensorboard_dir = 'workdir/tensorboard'
+
+device = 'cuda:0'  # Use GPU 0 H100 
+enable_cudnn_benchmark = true
+enable_amp = true  # Enable automatic mixed precision for performance
+enable_compile = false  # Set to true if using PyTorch 2.0+
+
+batch_size = 512
+opt_step_every = 1
+
+save_every = 400
+test_every = 20000
+submit_every = 400
+
+# Training play configuration
+[train_play.default]
+games = 800
+log_dir = 'workdir/train_play'
+boltzmann_epsilon = 0.005
+boltzmann_temp = 0.05
+top_p = 1.0
+repeats = 1
+
+[test_play]
+games = 3000
+log_dir = 'workdir/test_play'
+
+[dataset]
+# Update these paths to point to your actual dataset location
+globs = ['workdir/dataset/**/*.json.gz']
+file_index = 'workdir/dataset/file_index.pth'
+file_batch_size = 15
+reserve_ratio = 0.0
+num_workers = 4  # Adjust based on CPU cores available
+player_names_files = []
+num_epochs = 1
+enable_augmentation = false
+augmented_first = false
+
+[env]
+gamma = 1
+pts = [6.0, 4.0, 2.0, 0.0]
+
+[resnet]
+conv_channels = 192
+num_blocks = 40
+
+[cql]
+min_q_weight = 5
+
+[aux]
+next_rank_weight = 0.2
+
+[freeze_bn]
+walking = false
+
+[optim]
+eps = 1e-8
+betas = [0.9, 0.999]
+weight_decay = 0.1
+max_grad_norm = 0
+
+[optim.scheduler]
+peak = 1e-4
+final = 1e-4
+warm_up_steps = 0
+max_steps = 0
+
+[baseline.train]
+device = 'cuda:1'  # Use second GPU for baseline training
+enable_compile = false
+state_file = 'workdir/checkpoints/baseline_train.pth'
+
+[baseline.test]
+device = 'cuda:1'  # Use second GPU for baseline testing
+enable_compile = false
+state_file = 'workdir/checkpoints/baseline_test.pth'
+
+[online]
+history_window = 50
+enable_compile = false
+
+[online.remote]
+host = '127.0.0.1'
+port = 5000
+
+[online.server]
+buffer_dir = 'workdir/buffer'
+drain_dir = 'workdir/drain'
+sample_reuse_rate = 0
+sample_reuse_threshold = 0
+capacity = 1600
+force_sequential = false
+
+[1v3]
+seed_key = -1
+games_per_iter = 2000
+iters = 500
+log_dir = 'workdir/1v3'
+
+[1v3.challenger]
+device = 'cuda:0'
+name = 'walking'
+state_file = 'workdir/checkpoints/challenger.pth'
+stochastic_latent = false
+enable_compile = false
+enable_amp = true
+enable_rule_based_agari_guard = true
+
+[1v3.champion]
+device = 'cuda:1'
+name = 'baseline'
+state_file = 'workdir/checkpoints/champion.pth'
+stochastic_latent = false
+enable_compile = false
+enable_amp = true
+enable_rule_based_agari_guard = true
+
+[1v3.akochan]
+enabled = false
+# dir = '/path/to/akochan'  # Uncomment and set if using akochan
+# tactics = '/path/to/tactics.json'
+
+[grp]
+state_file = 'workdir/checkpoints/grp.pth'
+
+[grp.network]
+hidden_size = 64
+num_layers = 2
+
+[grp.control]
+device = 'cuda:0'
+enable_cudnn_benchmark = true
+tensorboard_dir = 'workdir/tensorboard/grp'
+
+batch_size = 512
+save_every = 2000
+val_steps = 400
+
+[grp.dataset]
+# Update these paths to your actual dataset locations
+train_globs = [
+    'workdir/dataset/train/**/*.json.gz',
+]
+val_globs = [
+    'workdir/dataset/val/**/*.json.gz',
+]
+file_index = 'workdir/dataset/grp_file_index.pth'
+file_batch_size = 50
+
+[grp.optim]
+lr = 1e-5
