@@ -7,4 +7,5 @@ target
 __pycache__/
 *.pyc
 *.pyo
+*.pipcache
 
