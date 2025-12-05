@@ -18,7 +18,7 @@ batch_size = 512
 opt_step_every = 1
 
 save_every = 400
-test_every = 20000
+test_every = 4000
 submit_every = 400
 
 # Training play configuration

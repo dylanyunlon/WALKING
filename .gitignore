@@ -7,5 +7,6 @@ target
 __pycache__/
 *.pyc
 *.pyo
-*.pipcache
+*.pip_cache
+db
 
