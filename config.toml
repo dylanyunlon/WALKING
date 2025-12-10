@@ -1,5 +1,5 @@
 # WALKING Project Configuration
-# Adapted for server environment at /data/jiacheng/system/cache/temp/icml2026/WALKING
+# Adapted for server environment at /root/dylan/icml2026/WALKING
 
 [control]
 version = 4

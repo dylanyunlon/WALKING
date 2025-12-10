@@ -13,8 +13,8 @@ set -e
 # =============================================================================
 # 配置变量
 # =============================================================================
-PROJECT_DIR="/data/jiacheng/system/cache/temp/icml2026/WALKING"
-AKAGI_DIR="/data/jiacheng/system/cache/temp/icml2026/Akagi"
+PROJECT_DIR="/root/dylan/icml2026/WALKING"
+AKAGI_DIR="/root/dylan/icml2026/Akagi"
 CONDA_ENV="walking3"
 WALKING_DIR="${PROJECT_DIR}/walking"
 
@@ -57,7 +57,7 @@ print("模型对比")
 print("=" * 70)
 
 # WALKING 模型
-walking_path = "/data/jiacheng/system/cache/temp/icml2026/WALKING/workdir/checkpoints/walking.pth"
+walking_path = "/root/dylan/icml2026/WALKING/workdir/checkpoints/walking.pth"
 walking_state = torch.load(walking_path, weights_only=True, map_location='cpu')
 w_cfg = walking_state['config']
 
@@ -69,7 +69,7 @@ print(f"  Num Blocks: {w_cfg['resnet']['num_blocks']}")
 print(f"  权重 Key: 'walking'")
 
 # Mortal 模型
-mortal_path = "/data/jiacheng/system/cache/temp/icml2026/Akagi/mjai_bot/mortal/mortal.pth"
+mortal_path = "/root/dylan/icml2026/Akagi/mjai_bot/mortal/mortal.pth"
 mortal_state = torch.load(mortal_path, weights_only=False, map_location='cpu')
 m_cfg = mortal_state['config']
 
@@ -143,7 +143,7 @@ print("=" * 70)
 # 加载 Challenger (WALKING 模型)
 # ============================================
 print("\n[1] 加载 Challenger (WALKING)...")
-walking_path = "/data/jiacheng/system/cache/temp/icml2026/WALKING/workdir/checkpoints/walking.pth"
+walking_path = "/root/dylan/icml2026/WALKING/workdir/checkpoints/walking.pth"
 state = torch.load(walking_path, weights_only=True, map_location='cpu')
 cfg = state['config']
 
@@ -175,7 +175,7 @@ print("    ✓ WALKING 加载完成")
 # 加载 Champion (Mortal 模型)
 # ============================================
 print("\n[2] 加载 Champion (Mortal from Akagi)...")
-mortal_path = "/data/jiacheng/system/cache/temp/icml2026/Akagi/mjai_bot/mortal/mortal.pth"
+mortal_path = "/root/dylan/icml2026/Akagi/mjai_bot/mortal/mortal.pth"
 state = torch.load(mortal_path, weights_only=False, map_location='cpu')
 cfg = state['config']
 
@@ -198,7 +198,7 @@ engine_champion = WalkingEngine(
     mortal_brain, mortal_dqn,
     is_oracle=False,
     version=version,
-    device=torch.device('cuda:1'),
+    device=torch.device('cuda:0'),
     enable_amp=True,
     enable_rule_based_agari_guard=True,
     name='Mortal',

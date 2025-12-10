@@ -69,11 +69,11 @@ python model_registry.py promote v0002
 *生成日期: 2025-12-01*
 
 
-(walking) jiacheng@ags1:/data/jiacheng/system/cache/temp/icml2026/WALKING$ cargo build --release。。。
+(walking) jiacheng@ags1:/root/dylan/icml2026/WALKING$ cargo build --release。。。
 
 error: linking with cc failed: exit status: 1
   |
-  = note:  "cc" "-m64" "<1 object files omitted>" "-Wl,--as-needed" "-Wl,-Bstatic" "/tmp/rustcddbgCM/liblibmimalloc_sys-875d0865e196ae20.rlib" "<sysroot>/lib/rustlib/x86_64-unknown-linux-gnu/lib/libcompiler_builtins-*.rlib" "-Wl,-Bdynamic" "-lgcc_s" "-lutil" "-lrt" "-lpthread" "-lm" "-ldl" "-lc" "-L" "/tmp/rustcddbgCM/raw-dylibs" "-B<sysroot>/lib/rustlib/x86_64-unknown-linux-gnu/bin/gcc-ld" "-fuse-ld=lld" "-Wl,--eh-frame-hdr" "-Wl,-z,noexecstack" "-L" "/data/jiacheng/system/cache/temp/icml2026/WALKING/target/release/build/libmimalloc-sys-7a10940477920827/out" "-L" "<sysroot>/lib/rustlib/x86_64-unknown-linux-gnu/lib" "-o" "/data/jiacheng/system/cache/temp/icml2026/WALKING/target/release/deps/stat-ffe5267afd0de45f" "-Wl,--gc-sections" "-pie" "-Wl,-z,relro,-z,now" "-Wl,-O1" "-nodefaultlibs"
+  = note:  "cc" "-m64" "<1 object files omitted>" "-Wl,--as-needed" "-Wl,-Bstatic" "/tmp/rustcddbgCM/liblibmimalloc_sys-875d0865e196ae20.rlib" "<sysroot>/lib/rustlib/x86_64-unknown-linux-gnu/lib/libcompiler_builtins-*.rlib" "-Wl,-Bdynamic" "-lgcc_s" "-lutil" "-lrt" "-lpthread" "-lm" "-ldl" "-lc" "-L" "/tmp/rustcddbgCM/raw-dylibs" "-B<sysroot>/lib/rustlib/x86_64-unknown-linux-gnu/bin/gcc-ld" "-fuse-ld=lld" "-Wl,--eh-frame-hdr" "-Wl,-z,noexecstack" "-L" "/root/dylan/icml2026/WALKING/target/release/build/libmimalloc-sys-7a10940477920827/out" "-L" "<sysroot>/lib/rustlib/x86_64-unknown-linux-gnu/lib" "-o" "/root/dylan/icml2026/WALKING/target/release/deps/stat-ffe5267afd0de45f" "-Wl,--gc-sections" "-pie" "-Wl,-z,relro,-z,now" "-Wl,-O1" "-nodefaultlibs"
   = note: some arguments are omitted. use --verbose to show all linker arguments
   = note: rust-lld: error: undefined symbol: PyUnicode_FromStringAndSize
 
@@ -104,24 +104,24 @@ export PYO3_PYTHON=$(which python)
 # 使用 maturin 构建（推荐用于 PyO3 项目）
 pip install maturin
 
-cd /data/jiacheng/system/cache/temp/icml2026/WALKING/libriichi
+cd /root/dylan/icml2026/WALKING/libriichi
 maturin build --release
 
 python -c "import riichi; print('成功导入 riichi 模块')"
 
-(walking) jiacheng@ags1:/data/jiacheng/system/cache/temp/icml2026/WALKING/libriichi$ pip install /data/jiacheng/system/cache/temp/icml2026/WALKING/target/wheels/libriichi-0.1.0-cp312-cp312-manylinux_2_34_x86_64.whl
-Processing /data/jiacheng/system/cache/temp/icml2026/WALKING/target/wheels/libriichi-0.1.0-cp312-cp312-manylinux_2_34_x86_64.whl
+(walking) jiacheng@ags1:/root/dylan/icml2026/WALKING/libriichi$ pip install /root/dylan/icml2026/WALKING/target/wheels/libriichi-0.1.0-cp312-cp312-manylinux_2_34_x86_64.whl
+Processing /root/dylan/icml2026/WALKING/target/wheels/libriichi-0.1.0-cp312-cp312-manylinux_2_34_x86_64.whl
 Installing collected packages: libriichi
 Successfully installed libriichi-0.1.0
-(walking) jiacheng@ags1:/data/jiacheng/system/cache/temp/icml2026/WALKING/libriichi$ python -c "import riichi; print('成功导入 riichi 模块')"
+(walking) jiacheng@ags1:/root/dylan/icml2026/WALKING/libriichi$ python -c "import riichi; print('成功导入 riichi 模块')"
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
   File "/home/jiacheng/anaconda3/envs/walking/lib/python3.12/site-packages/riichi/__init__.py", line 1, in <module>
     from .riichi import *
 ImportError: dynamic module does not define module export function (PyInit_riichi)
 
-这是因为构建时警告的问题——模块名不匹配,cat /data/jiacheng/system/cache/temp/icml2026/WALKING/libriichi/src/lib.rs
-cd /data/jiacheng/system/cache/temp/icml2026/WALKING/libriichi
+这是因为构建时警告的问题——模块名不匹配,cat /root/dylan/icml2026/WALKING/libriichi/src/lib.rs
+cd /root/dylan/icml2026/WALKING/libriichi
 
 # 修改 Cargo.toml，把库名从 riichi 改成 libriichi
 sed -i 's/name = "riichi"/name = "libriichi"/' Cargo.toml
@@ -134,7 +134,7 @@ pip uninstall libriichi -y
 
 # 重新构建
 maturin build --release
-pip install /data/jiacheng/system/cache/temp/icml2026/WALKING/target/wheels/libriichi-*.whl
+pip install /root/dylan/icml2026/WALKING/target/wheels/libriichi-*.whl
 
 # 测试导入
 python -c "import libriichi; print('成功导入 libriichi 模块')"

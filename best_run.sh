@@ -16,7 +16,7 @@ set -e
 # =============================================================================
 # 配置变量
 # =============================================================================
-PROJECT_DIR="/data/jiacheng/system/cache/temp/icml2026/WALKING"
+PROJECT_DIR="/root/dylan/icml2026/WALKING"
 CONDA_ENV="walking3"
 CONFIG_FILE="${PROJECT_DIR}/config.toml"
 WALKING_DIR="${PROJECT_DIR}/walking"
