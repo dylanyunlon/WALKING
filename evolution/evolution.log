@@ -1,0 +1,102 @@
+[0;34m[STEP 14:17:35][0m 初始化进化系统...
+===== Evolution System Started at Wed 10 Dec 2025 02:17:35 PM CST =====
+[0;32m[INFO 14:17:35][0m 进化系统初始化完成
+[0;35m[EVOLUTION 14:17:35][0m ==========================================
+[0;35m[EVOLUTION 14:17:35][0m      Walking 自进化系统启动
+[0;35m[EVOLUTION 14:17:35][0m ==========================================
+[0;32m[INFO 14:17:35][0m 目标脚本: /root/dylan/icml2026/WALKING/walking_vs_mortal.sh
+[0;32m[INFO 14:17:35][0m 进化间隔: 60秒
+[0;32m[INFO 14:17:35][0m 运行模式: 单次
+[0;32m[INFO 14:17:35][0m 试运行: 否
+[0;35m[EVOLUTION 14:17:36][0m >>> 开始新一轮进化 <<<
+[0;34m[STEP 14:17:36][0m 运行目标脚本: /root/dylan/icml2026/WALKING/walking_vs_mortal.sh
+[0;32m[INFO 14:17:43][0m 运行完成 - 状态: success, 排名: null, 得分: null
+[0;32m[INFO 14:17:43][0m 单次运行完成，退出
+[0;34m[STEP 14:38:18][0m 初始化进化系统...
+===== Evolution System Started at Wed 10 Dec 2025 02:38:18 PM CST =====
+[0;32m[INFO 14:38:18][0m 进化系统初始化完成
+[0;35m[EVOLUTION 14:38:18][0m ==========================================
+[0;35m[EVOLUTION 14:38:18][0m      Walking 自进化系统启动
+[0;35m[EVOLUTION 14:38:18][0m ==========================================
+[0;32m[INFO 14:38:18][0m 目标脚本: /root/dylan/icml2026/WALKING/walking_vs_mortal.sh
+[0;32m[INFO 14:38:18][0m 进化间隔: 60秒
+[0;32m[INFO 14:38:18][0m 运行模式: 单次
+[0;32m[INFO 14:38:18][0m 试运行: 否
+[0;35m[EVOLUTION 14:38:19][0m >>> 开始新一轮进化 <<<
+[0;34m[STEP 14:38:19][0m 运行目标脚本: /root/dylan/icml2026/WALKING/walking_vs_mortal.sh
+[0;32m[INFO 14:38:24][0m 运行完成 - 状态: success, 排名: null, 得分: null
+[0;32m[INFO 14:38:24][0m 单次运行完成，退出
+[0;34m[STEP 14:38:46][0m 检查系统依赖...
+[1;33m[WARN 14:38:46][0m ✗ jq 未安装 (JSON处理工具)
+[0;32m[INFO 14:38:46][0m 正在安装 jq (JSON处理工具)...
+[0;32m[INFO 14:38:51][0m ✓ jq 安装成功!
+[0;34m[STEP 14:42:02][0m 初始化进化系统...
+===== Evolution System Started at Wed 10 Dec 2025 02:42:02 PM CST =====
+[0;32m[INFO 14:42:02][0m 进化系统初始化完成
+[0;35m[EVOLUTION 14:42:02][0m ==========================================
+[0;35m[EVOLUTION 14:42:02][0m      Walking 自进化系统启动
+[0;35m[EVOLUTION 14:42:02][0m ==========================================
+[0;32m[INFO 14:42:02][0m 目标脚本: /root/dylan/icml2026/WALKING/walking_vs_mortal.sh
+[0;32m[INFO 14:42:02][0m 进化间隔: 60秒
+[0;32m[INFO 14:42:02][0m 运行模式: 单次
+[0;32m[INFO 14:42:02][0m 试运行: 否
+[0;35m[EVOLUTION 14:42:03][0m >>> 开始新一轮进化 <<<
+[0;34m[STEP 14:42:03][0m 运行目标脚本: /root/dylan/icml2026/WALKING/walking_vs_mortal.sh
+[0;32m[INFO 14:42:08][0m 运行完成 - 状态: success, 排名: null, 得分: null
+[0;32m[INFO 14:42:08][0m 单次运行完成，退出
+[0;34m[STEP 14:49:34][0m 初始化进化系统...
+===== Evolution System Started at Wed 10 Dec 2025 02:49:34 PM CST =====
+[0;32m[INFO 14:49:34][0m 进化系统初始化完成
+[0;35m[EVOLUTION 14:49:34][0m ==========================================
+[0;35m[EVOLUTION 14:49:34][0m      Walking 自进化系统启动
+[0;35m[EVOLUTION 14:49:34][0m ==========================================
+[0;32m[INFO 14:49:34][0m 目标脚本: /root/dylan/icml2026/WALKING/walking_vs_mortal.sh
+[0;32m[INFO 14:49:34][0m 进化间隔: 60秒
+[0;32m[INFO 14:49:34][0m 运行模式: 单次
+[0;32m[INFO 14:49:34][0m 试运行: 否
+[0;35m[EVOLUTION 14:49:35][0m >>> 开始新一轮进化 <<<
+[0;34m[STEP 14:49:35][0m 运行目标脚本: /root/dylan/icml2026/WALKING/walking_vs_mortal.sh
+[0;32m[INFO 14:49:40][0m 运行完成 - 状态: success, 排名: null, 得分: null
+[0;32m[INFO 14:49:40][0m 单次运行完成，退出
+[0;34m[STEP 15:11:19][0m 初始化进化系统...
+===== Evolution System Started at Wed 10 Dec 2025 03:11:19 PM CST =====
+[0;32m[INFO 15:11:19][0m 进化系统初始化完成
+[0;35m[EVOLUTION 15:11:19][0m ==========================================
+[0;35m[EVOLUTION 15:11:19][0m      Walking 自进化系统启动
+[0;35m[EVOLUTION 15:11:19][0m ==========================================
+[0;32m[INFO 15:11:19][0m 目标脚本: /root/dylan/icml2026/WALKING/walking_vs_mortal.sh
+[0;32m[INFO 15:11:19][0m 进化间隔: 60秒
+[0;32m[INFO 15:11:19][0m 运行模式: 单次
+[0;32m[INFO 15:11:19][0m 试运行: 否
+[0;35m[EVOLUTION 15:11:20][0m >>> 开始新一轮进化 <<<
+[0;34m[STEP 15:11:20][0m 运行目标脚本: /root/dylan/icml2026/WALKING/walking_vs_mortal.sh
+[0;32m[INFO 15:11:25][0m 运行完成 - 状态: success, 排名: null, 得分: null
+[0;32m[INFO 15:11:25][0m 单次运行完成，退出
+[0;34m[STEP 15:11:48][0m 初始化进化系统...
+===== Evolution System Started at Wed 10 Dec 2025 03:11:48 PM CST =====
+[0;32m[INFO 15:11:48][0m 进化系统初始化完成
+[0;35m[EVOLUTION 15:11:48][0m ==========================================
+[0;35m[EVOLUTION 15:11:48][0m      Walking 自进化系统启动
+[0;35m[EVOLUTION 15:11:48][0m ==========================================
+[0;32m[INFO 15:11:48][0m 目标脚本: /root/dylan/icml2026/WALKING/walking_vs_mortal.sh
+[0;32m[INFO 15:11:48][0m 进化间隔: 60秒
+[0;32m[INFO 15:11:48][0m 运行模式: 单次
+[0;32m[INFO 15:11:48][0m 试运行: 否
+[0;35m[EVOLUTION 15:11:49][0m >>> 开始新一轮进化 <<<
+[0;34m[STEP 15:11:49][0m 运行目标脚本: /root/dylan/icml2026/WALKING/walking_vs_mortal.sh
+[0;32m[INFO 15:11:54][0m 运行完成 - 状态: success, 排名: null, 得分: null
+[0;32m[INFO 15:11:54][0m 单次运行完成，退出
+[0;34m[STEP 15:28:51][0m 初始化进化系统...
+===== Evolution System Started at Wed 10 Dec 2025 03:28:51 PM CST =====
+[0;32m[INFO 15:28:51][0m 进化系统初始化完成
+[0;35m[EVOLUTION 15:28:51][0m ==========================================
+[0;35m[EVOLUTION 15:28:51][0m      Walking 自进化系统启动
+[0;35m[EVOLUTION 15:28:51][0m ==========================================
+[0;32m[INFO 15:28:51][0m 目标脚本: /root/dylan/icml2026/WALKING/walking_vs_mortal.sh
+[0;32m[INFO 15:28:51][0m 进化间隔: 60秒
+[0;32m[INFO 15:28:51][0m 运行模式: 单次
+[0;32m[INFO 15:28:51][0m 试运行: 否
+[0;35m[EVOLUTION 15:28:52][0m >>> 开始新一轮进化 <<<
+[0;34m[STEP 15:28:52][0m 运行目标脚本: /root/dylan/icml2026/WALKING/walking_vs_mortal.sh
+[0;32m[INFO 16:32:38][0m 运行完成 - 状态: success, 排名: 2.3796, 得分: +7.51
+[0;32m[INFO 16:32:38][0m 单次运行完成，退出

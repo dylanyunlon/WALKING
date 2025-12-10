@@ -7,18 +7,24 @@ Jeff Dean 理论实现:
 - 下一轮用 bash 读取
 - 支持从 Python 训练/对战代码中直接调用
 
+改进历史:
+- v1: 基础版本
+- v2: 增强错误追踪，记录文件绝对路径和堆栈信息
+
 用法:
     from debug_writer import DebugWriter
     
     writer = DebugWriter()
     writer.log_metric("avg_rank", 2.45)
-    writer.log_error("CUDA out of memory")
+    writer.log_error("CUDA out of memory", file_path="/path/to/engine.py")
     writer.save()
 """
 
 import json
 import os
+import re
 import sys
+import traceback
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 from pathlib import Path
@@ -39,15 +45,18 @@ class DebugWriter:
             debug_file: 调试信息文件路径
             evolution_dir: 进化目录
         """
-        # 默认路径
+        # 默认路径 - 支持动态检测
         if evolution_dir is None:
             evolution_dir = os.environ.get(
                 "EVOLUTION_DIR",
-                "/root/dylan/icml2026/WALKING/evolution"
+                self._detect_evolution_dir()
             )
         
         self.evolution_dir = Path(evolution_dir)
         self.evolution_dir.mkdir(parents=True, exist_ok=True)
+        
+        # 项目目录
+        self.project_dir = self.evolution_dir.parent
         
         if debug_file is None:
             debug_file = self.evolution_dir / "debug_info.json"
@@ -59,8 +68,32 @@ class DebugWriter:
         
         # 当前会话的临时数据
         self._session_metrics: Dict[str, Any] = {}
-        self._session_errors: List[str] = []
-        self._session_logs: List[str] = []
+        self._session_errors: List[Dict] = []
+        self._session_logs: List[Dict] = []
+    
+    def _detect_evolution_dir(self) -> str:
+        """自动检测进化目录"""
+        # 1. 环境变量
+        env_project = os.environ.get("WALKING_PROJECT_DIR")
+        if env_project:
+            return os.path.join(env_project, "evolution")
+        
+        # 2. 脚本所在目录
+        script_dir = Path(__file__).resolve().parent
+        if script_dir.name == "evolution":
+            return str(script_dir)
+        if (script_dir / "evolution").exists():
+            return str(script_dir / "evolution")
+        if (script_dir.parent / "evolution").exists():
+            return str(script_dir.parent / "evolution")
+        
+        # 3. 常见路径
+        common = Path("/root/dylan/icml2026/WALKING/evolution")
+        if common.exists():
+            return str(common)
+        
+        # 4. 默认
+        return "/root/dylan/icml2026/WALKING/evolution"
     
     def _load_or_create(self) -> Dict[str, Any]:
         """加载现有数据或创建新的"""
@@ -102,24 +135,128 @@ class DebugWriter:
         if name in ["avg_rank", "avg_pt", "total_games"]:
             self.data["metrics"][name] = value
     
-    def log_error(self, error: str, fatal: bool = False):
+    def log_error(
+        self, 
+        error: str, 
+        fatal: bool = False,
+        file_path: str = None,
+        line_number: int = None,
+        exception: Exception = None
+    ):
         """
-        记录错误
+        记录错误 (增强版 - 包含文件路径信息)
         
         Args:
             error: 错误信息
             fatal: 是否是致命错误
+            file_path: 错误发生的文件绝对路径
+            line_number: 错误发生的行号
+            exception: 异常对象 (用于自动提取堆栈信息)
         """
         timestamp = datetime.now().isoformat()
-        self._session_errors.append({
+        
+        error_entry = {
             "time": timestamp,
-            "error": error,
+            "error": str(error),
             "fatal": fatal
-        })
+        }
+        
+        # 添加文件路径信息
+        if file_path:
+            # 确保是绝对路径
+            abs_path = str(Path(file_path).resolve()) if os.path.exists(file_path) else file_path
+            error_entry["file_path"] = abs_path
+            error_entry["file_exists"] = os.path.exists(file_path)
+        
+        if line_number:
+            error_entry["line_number"] = line_number
+        
+        # 如果有异常对象，提取更多信息
+        if exception:
+            # 获取完整的堆栈跟踪
+            tb_lines = traceback.format_exception(type(exception), exception, exception.__traceback__)
+            error_entry["traceback"] = ''.join(tb_lines[-10:])  # 保留最后10行
+            
+            # 从堆栈中提取相关文件
+            related_files = self._extract_files_from_traceback(tb_lines)
+            if related_files:
+                error_entry["related_files"] = related_files
+        
+        # 如果没有提供文件路径，尝试从错误消息中提取
+        if not file_path:
+            extracted = self._extract_file_from_error(error)
+            if extracted:
+                error_entry["extracted_file"] = extracted
+        
+        self._session_errors.append(error_entry)
         
         if fatal:
-            self.data["last_error"] = error
+            self.data["last_error"] = error[:500]  # 限制长度
             self.data["last_status"] = "error"
+    
+    def _extract_files_from_traceback(self, tb_lines: List[str]) -> List[Dict[str, Any]]:
+        """从堆栈跟踪中提取文件信息"""
+        files = []
+        seen = set()
+        
+        # 匹配 Python 堆栈格式: File "/path/to/file.py", line 123
+        pattern = r'File "([^"]+)", line (\d+)'
+        
+        for line in tb_lines:
+            match = re.search(pattern, line)
+            if match:
+                file_path = match.group(1)
+                line_num = int(match.group(2))
+                
+                # 跳过标准库文件
+                if '/usr/lib/' in file_path or '/site-packages/' in file_path:
+                    continue
+                
+                # 去重
+                if file_path in seen:
+                    continue
+                seen.add(file_path)
+                
+                files.append({
+                    "path": file_path,
+                    "line": line_num,
+                    "exists": os.path.exists(file_path)
+                })
+        
+        return files[:5]  # 最多返回5个文件
+    
+    def _extract_file_from_error(self, error: str) -> Optional[Dict[str, Any]]:
+        """从错误消息中提取文件路径"""
+        patterns = [
+            # Python 风格: File "/path/to/file.py", line 123
+            r'File "([^"]+\.py)", line (\d+)',
+            # 带行号的路径: /path/to/file.py:123
+            r'(/[^\s:]+\.(?:py|sh)):(\d+)',
+            # 一般绝对路径
+            r'(/[^\s:]+\.(?:py|sh|pth|toml|json))',
+        ]
+        
+        for pattern in patterns:
+            match = re.search(pattern, error)
+            if match:
+                groups = match.groups()
+                file_path = groups[0]
+                line_num = int(groups[1]) if len(groups) > 1 and groups[1] else None
+                
+                result = {
+                    "path": file_path,
+                    "exists": os.path.exists(file_path)
+                }
+                
+                if os.path.exists(file_path):
+                    result["absolute_path"] = str(Path(file_path).resolve())
+                
+                if line_num:
+                    result["line"] = line_num
+                
+                return result
+        
+        return None
     
     def log(self, message: str, level: str = "info"):
         """
@@ -206,10 +343,12 @@ class DebugWriter:
         }
         
         # 写入文件
-        with open(self.debug_file, 'w') as f:
-            json.dump(self.data, f, indent=2, ensure_ascii=False)
-        
-        print(f"📝 调试信息已保存到: {self.debug_file}")
+        try:
+            with open(self.debug_file, 'w') as f:
+                json.dump(self.data, f, indent=2, ensure_ascii=False)
+            print(f"📝 调试信息已保存到: {self.debug_file}")
+        except IOError as e:
+            print(f"❌ 保存调试信息失败: {e}", file=sys.stderr)
     
     def save_output(self, output: str, filename: str = "last_output.txt"):
         """保存输出到文件"""
@@ -226,6 +365,30 @@ class DebugWriter:
     def get_summary(self) -> str:
         """获取调试信息摘要"""
         metrics = self.data.get("metrics", {})
+        
+        # 错误摘要
+        error_summary = ""
+        session_data = self.data.get("session_data", {})
+        errors = session_data.get("errors", [])
+        if errors:
+            latest_error = errors[-1]
+            file_info = latest_error.get('file_path') or \
+                        latest_error.get('extracted_file', {}).get('path') or \
+                        'N/A'
+            error_summary = f"""
+Latest Error:
+  Time: {latest_error.get('time', 'N/A')}
+  Message: {latest_error.get('error', 'N/A')[:100]}
+  File: {file_info}
+  Fatal: {latest_error.get('fatal', False)}
+"""
+            # 显示相关文件
+            related = latest_error.get('related_files', [])
+            if related:
+                error_summary += "  Related Files:\n"
+                for rf in related[:3]:
+                    error_summary += f"    - {rf.get('path')}:{rf.get('line', '?')}\n"
+        
         return f"""
 Generation: {self.data.get('generation', 0)}
 Status: {self.data.get('last_status', 'unknown')}
@@ -233,6 +396,7 @@ Last Run: {self.data.get('last_run', 'N/A')}
 Avg Rank: {metrics.get('avg_rank', 'N/A')}
 Avg Pt: {metrics.get('avg_pt', 'N/A')}
 Total Games: {metrics.get('total_games', 0)}
+{error_summary}
 """
 
 
@@ -247,7 +411,7 @@ class EvolutionContext:
             ctx.record_battle_result(result)
             
             if error:
-                ctx.log_error(error)
+                ctx.log_error(error, file_path=__file__)
     """
     
     def __init__(self, evolution_dir: str = None):
@@ -266,9 +430,13 @@ class EvolutionContext:
             duration = (datetime.now() - self.start_time).total_seconds()
             self.writer.data["last_duration_seconds"] = duration
         
-        # 如果有异常，记录错误
+        # 如果有异常，记录错误（包含完整异常信息）
         if exc_type is not None:
-            self.writer.log_error(f"{exc_type.__name__}: {exc_val}", fatal=True)
+            self.writer.log_error(
+                f"{exc_type.__name__}: {exc_val}", 
+                fatal=True,
+                exception=exc_val
+            )
             self.writer.set_exit_code(1)
         else:
             self.writer.set_exit_code(0)
@@ -291,7 +459,10 @@ def cli():
     parser.add_argument("--name", "-n", help="指标/日志名称")
     parser.add_argument("--value", "-v", help="指标值")
     parser.add_argument("--message", "-m", help="消息内容")
-    parser.add_argument("--level", "-l", default="info", help="日志级别")
+    parser.add_argument("--file", "-f", help="相关文件路径")
+    parser.add_argument("--line", "-l", type=int, help="行号")
+    parser.add_argument("--fatal", action="store_true", help="标记为致命错误")
+    parser.add_argument("--level", default="info", help="日志级别")
     
     args = parser.parse_args()
     
@@ -314,7 +485,12 @@ def cli():
             print("需要 --name 和 --value 参数")
             
     elif args.command == "error":
-        writer.log_error(args.message or "Unknown error")
+        writer.log_error(
+            args.message or "Unknown error",
+            fatal=args.fatal,
+            file_path=args.file,
+            line_number=args.line
+        )
         writer.save()
         
     elif args.command == "status":
